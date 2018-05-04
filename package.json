@@ -1,5 +1,5 @@
 {
-  "name": "ip-proxy-http",
+  "name": "ip-proxy-request",
   "version": "1.0.0",
   "description": "nodejs 免费ip代理发送请求",
   "main": "index.js",
