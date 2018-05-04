@@ -11,5 +11,5 @@ describe('ipProxyHttp testObject', () => {
       expect(sendProxy).toBe(`http://${successProxy['host']}:${successProxy['port']}/`);
       done()
     })
-  }, 100000)
+  }, 1000000)
 })
