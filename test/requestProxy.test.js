@@ -3,7 +3,7 @@ const ipProxyHttp = require('../src/requestProxy')
 describe('ipProxyHttp testObject', () => {
   test('ipProxyHttp.send should send request with a proxy ip', (done) => {
     ipProxyHttp.send({
-      url: 'https://www.xiaohongshu.com/discovery/item/5aded59bbc1c785a697def8f',
+      url: 'https://www.baidu.com',
       headers: {
         'Referer': 'https://www.xiaohongshu.com/explore'
       },
@@ -14,5 +14,5 @@ describe('ipProxyHttp testObject', () => {
       expect(sendProxy).toBe(`http://${successProxy['host']}:${successProxy['port']}/`);
       done()
     })
-  }, 40000)
+  }, 100000)
 })
