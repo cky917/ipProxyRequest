@@ -12,7 +12,7 @@ const { response, data } = await ipProxyRequest.send({ url: 'xxxx'})
 
 // promise
 ipProxyRequest.send({ url: 'xxxx'})
-.then({ response, data } => {
+.then(({ response, data }) => {
  // xxx
 }).catch(err => {
  // xxx
