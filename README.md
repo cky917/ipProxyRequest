@@ -4,7 +4,7 @@
 
 获取ip的思路是参考的[这个仓库](https://github.com/kongtianyi/freeProxySpider)，在此基础上进行了代码优化和拓展，封装了request逻辑，可以直接使用。
 
-使用方法，具体可以参考/example/index.js：
+使用方法，具体可以参考/examples/index.js：
 
 ```javascript
 // async
