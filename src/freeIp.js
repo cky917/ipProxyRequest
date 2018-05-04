@@ -23,7 +23,6 @@ async function getUsefulProxy () {
     usefulProxyList = await check(proxyList)
     usefulCount++
   }
-  console.log(usefulProxyList)
   return Promise.resolve(usefulProxyList)
 }
 
