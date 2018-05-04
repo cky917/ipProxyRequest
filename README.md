@@ -6,7 +6,13 @@
 
 使用方法，具体可以参考/examples/index.js：
 
+安装：
+`npm install ip-proxy-request --save`
+or
+`yarn add ip-proxy-request`
+
 ```javascript
+const ipProxyRequest = require('ip-proxy-request')
 // async
 const { response, data } = await ipProxyRequest.send({ url: 'xxxx'})
 
