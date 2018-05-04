@@ -6,10 +6,25 @@
   "author": "cky <576779975@qq.com>",
   "license": "MIT",
   "scripts": {
-    "example": "node ./example/index.js"
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cky917/ipProxyRequest.git"
+  },
+  "keywords": [
+    "nodejs",
+    "proxy",
+    "ip"
+  ],
+  "bugs": {
+    "url": "https://github.com/cky917/ipProxyRequest/issues"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "request": "git+https://github.com/cky917/request.git"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
   }
 }

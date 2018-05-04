@@ -9,6 +9,9 @@ let succuessProxy = null
 let start = null
 
 const ipProxyHttp = {
+  getSuccuessProxy () {
+    return succuessProxy
+  },
   refreshProxy () {
     succuessProxy = null
     proxyList = []
