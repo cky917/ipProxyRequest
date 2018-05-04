@@ -28,7 +28,7 @@ const ipProxyHttp = {
       headers: {
         'User-Agent': userAgent
       },
-      timeout: 5000 
+      timeout: 20000
     }
     const mergedOpts = mergeOptions(defaultOptions, options)
     
@@ -37,21 +37,20 @@ const ipProxyHttp = {
       .then(res => {
         succuessProxy = ipProxy
         resolve(res)
-      }).catch(err => {
+      }).catch(async (err) => {
         const duration = +new Date() - start
         succuessProxy = null
         if (duration > timeout) {
           reject(new Error('timeout'))
         } else {
           console.log(`http://${ipProxy['host']}:${ipProxy['port']}代理请求失败，休息1s后换ip重试...`)
-          sleep(1000)
+          await sleep(1000)
           resolve(this.send(options, true))
         }
       })
     })
   },
   async getProxyIp () {
-    let count = 0
     if (succuessProxy) {
       return Promise.resolve(succuessProxy)
     }

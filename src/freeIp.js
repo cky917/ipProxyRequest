@@ -1,4 +1,4 @@
-const axios = require('axios')
+const rp = require('./requestPromise')
 const cheerio = require('cheerio')
 const { sleep } = require('./utils')
 
@@ -34,9 +34,9 @@ function getProxyList () {
   let proxys = []
   
   return new Promise((resolve, reject) => {
-    axios({
+    rp({
       url: url,
-      method: 'get',
+      method: 'GET',
       timeout: 20000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
@@ -72,16 +72,13 @@ function checkProxy (proxy) {
   // 尝试请求百度的静态资源公共库中的jquery文件
   const url = 'http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'
   return new Promise((resolve) => {
-    axios({
+    rp({
       url: url,
-      method: 'get',
-      proxy: {
-        host: proxy.ip,
-        port: proxy.port
-      },
-      timeout: 10000 // 10s没有返回则视为代理不行
-    }).then(res => {
-      if (res.status === 200) {
+      method: 'GET',
+      proxy: 'http://' + proxy['ip'] + ':' + proxy['port'],
+      timeout: 20000 // 20s没有返回则视为代理不行
+    }).then(({ response }) => {
+      if (response.statusCode === 200) {
         resolve(proxy)
         console.log(`${proxy.ip}:${proxy.port}, useful!`)
       } else {
@@ -102,7 +99,7 @@ function check (proxys) {
       var proxy = proxys[i]
       requestArr.push(checkProxy(proxy))
     }
-    axios.all(requestArr).then(data => {
+    Promise.all(requestArr).then(data => {
       const useful = data.filter(item => item)
       resolve(useful)
     }).catch(err => {
