@@ -1,6 +1,6 @@
 {
   "name": "ip-proxy-request",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "nodejs 免费ip代理发送请求",
   "main": "index.js",
   "author": "cky <576779975@qq.com>",
