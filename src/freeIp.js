@@ -2,6 +2,11 @@ const rp = require('./requestPromise')
 const cheerio = require('cheerio')
 const { sleep } = require('./utils')
 
+let xiciProxy = [
+  { ip: '121.231.168.214', port: 6666 },
+  { ip: '113.86.222.110', port: 61234 },
+  { ip: '122.114.31.177', port: 808 },
+];
 async function getUsefulProxy () {
   let proxyList = []
   let usefulProxyList = []
@@ -12,7 +17,8 @@ async function getUsefulProxy () {
       console.log('proxy列表为空，休息1s重新获取')
       sleep(1000)
     }
-    proxyList = await getProxyList()
+    const proxy = xiciProxy[count % xiciProxy.length]
+    proxyList = await getProxyList(proxy)
     count++
   }
   while (usefulProxyList.length === 0) {
@@ -21,6 +27,7 @@ async function getUsefulProxy () {
       await sleep(1000)
     }
     usefulProxyList = await check(proxyList)
+    xiciProxy = usefulProxyList.slice()
     usefulCount++
   }
   return Promise.resolve(usefulProxyList)
@@ -29,18 +36,15 @@ async function getUsefulProxy () {
 /**
  * 获取www.xicidaili.com提供的免费代理
  */
-function getProxyList () {
+function getProxyList (xiciProxy) {
   const url = 'http://www.xicidaili.com/nn' // 国内高匿代理
   let proxys = []
-  
   return new Promise((resolve, reject) => {
     rp({
       url: url,
       method: 'GET',
-      timeout: 20000,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36'
-      } // 给个浏览器头，不然网站拒绝访问
+      proxy: 'http://' + xiciProxy['ip'] + ':' + xiciProxy['port'],
+      timeout: 20000 // 20s没有返回则视为代理不行
     }).then(res => {
       const body = res.data
       var $ = cheerio.load(body)
