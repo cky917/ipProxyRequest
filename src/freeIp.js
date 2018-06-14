@@ -2,11 +2,6 @@ const rp = require('./requestPromise')
 const cheerio = require('cheerio')
 const { sleep } = require('./utils')
 
-let xiciProxy = [
-  { ip: '121.231.168.214', port: 6666 },
-  { ip: '113.86.222.110', port: 61234 },
-  { ip: '122.114.31.177', port: 808 },
-];
 async function getUsefulProxy () {
   let proxyList = []
   let usefulProxyList = []
@@ -15,10 +10,9 @@ async function getUsefulProxy () {
   while (proxyList.length === 0) {
     if (count > 0) {
       console.log('proxy列表为空，休息1s重新获取')
-      sleep(1000)
+      await sleep(1000)
     }
-    const proxy = xiciProxy[count % xiciProxy.length]
-    proxyList = await getProxyList(proxy)
+    proxyList = await getProxyList()
     count++
   }
   while (usefulProxyList.length === 0) {
@@ -27,7 +21,6 @@ async function getUsefulProxy () {
       await sleep(1000)
     }
     usefulProxyList = await check(proxyList)
-    xiciProxy = usefulProxyList.slice()
     usefulCount++
   }
   return Promise.resolve(usefulProxyList)
@@ -36,34 +29,28 @@ async function getUsefulProxy () {
 /**
  * 获取www.xicidaili.com提供的免费代理
  */
-function getProxyList (xiciProxy) {
-  const url = 'http://www.xicidaili.com/nn' // 国内高匿代理
+function getProxyList () {
+  const url = 'https://proxy.l337.tech/txt' // 国内高匿代理
   let proxys = []
   return new Promise((resolve, reject) => {
     rp({
       url: url,
       method: 'GET',
-      proxy: 'http://' + xiciProxy['ip'] + ':' + xiciProxy['port'],
-      timeout: 20000 // 20s没有返回则视为代理不行
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
+      },
+      timeout: 20000
     }).then(res => {
-      const body = res.data
-      var $ = cheerio.load(body)
-      var trs = $('#ip_list tr')
-      for (var i = 1; i < trs.length; i++) {
-        const proxy = {}
-        const tr = trs.eq(i)
-        const tds = tr.children('td')
-        proxy.ip = tds.eq(1).text()
-        proxy.port = tds.eq(2).text()
-        let speed = tds.eq(6).children('div').attr('title')
-        speed = speed.substring(0, speed.length - 1)
-        let connectTime = tds.eq(7).children('div').attr('title')
-        connectTime = connectTime.substring(0, connectTime.length - 1)
-        if (parseInt(speed) <= 5 && connectTime <= 1) { // 用速度和连接时间筛选一轮
-          proxys.push(proxy)
+      const { body } = res.response;
+      const proxyList = body.split('\n').filter(item => item);
+      const proxys = proxyList.map(item => {
+        const proxy = item.split(':')
+        return {
+          ip: proxy[0],
+          port: proxy[1]
         }
-      }
-      proxys = proxys.slice(0, 20)
+      })
+      console.log(proxys)
       resolve(proxys)
     }).catch(err => {
       console.log(err)

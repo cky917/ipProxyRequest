@@ -25,7 +25,7 @@ ipProxyRequest.send({ url: 'xxxx'})
 })
 ```
 
-模块是去爬取[http://www.xicidaili.com/nn](http://www.xicidaili.com/nn)这个页面获取免费代理ip，所以强依赖这个网站。
+模块是去爬取[https://proxy.l337.tech/txt](https://proxy.l337.tech/txt)这个页面获取免费代理ip，所以强依赖这个网站。
 
 由于代理ip的不稳定性较大，有些ip的有效期也短。进行多次请求的时候，每次会先去拉取ip列表，逐个进行尝试，能够正常返回请求的Ip就是`succuessProxy`，会继续用于下一次请求，直至这个ip无法正确访问，则用ip列表的下一个进行再尝试。如果ip列表都尝试完了，就会再去爬取ip列表，循环这个操作。
 
